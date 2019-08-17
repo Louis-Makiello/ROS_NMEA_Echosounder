@@ -25,7 +25,7 @@ Green=Colour(0,255,0,1)
 Blue=Colour(0,0,255,1)
 Purple=Colour(51,0,102,1)
 
-csvfile='/home/ubuntu/Desktop/Echo_locationPP.txt'
+csvfile='/home/ubuntu/Desktop/Echo_location.txt'
 rospy.init_node('tf2_sonar_coordinates')
 i=0
 def callback(data):
