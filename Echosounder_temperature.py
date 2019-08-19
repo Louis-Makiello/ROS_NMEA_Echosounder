@@ -26,10 +26,10 @@ sound_velocity=1500#starting value
 S=0#this is the salinity
 D=0.5#starting value depth of echosounder
 while True:
-   line = ser.readline()
-   if len(line) == 0:
+   line = ser.readline() # read the echosounder data
+   if len(line) == 0: # in case it's switched off
       sys.exit()
-   if "$SDDPT" in line:
+   if "$SDDPT" in line: #this line contains depth calculated using default speed of sound
       Timestamp=rospy.Time.now()
       Timestamp_corrected=rospy.Time()
       Timestamp_corrected.secs=Timestamp.secs
@@ -39,16 +39,16 @@ while True:
          echorange=float((listofchars[1]))
          echosounder_time_of_travel=echorange/1500 #Airmar EchoRange SS510 uses 1500 as speed of sound
          echorange_salinity_temp_corrected=sound_velocity*echosounder_time_of_travel
-         D=echorange_salinity_temp_corrected/2
-         pos=PoseStamped()
+         D=echorange_salinity_temp_corrected/2 #speed of sound varies with pressure, i e depth. This is an approximation
+         pos=PoseStamped() # echosounder range in the reference frame of the echosounder
          pos.header.seq=1
          pos.header.stamp = Timestamp_corrected
          pos.header.frame_id = 'sonar'
          pos.pose.position.z=-1*echorange_salinity_temp_corrected
          pub.publish(pos)
       except:
-         print("wait for it")
-   if "$SDMTW" in line:
+         print("wait for it") 
+   if "$SDMTW" in line: #this line contains water temperature
       listofchars_temp=line.split(',')
       try:
          T=float((listofchars_temp[1]))
